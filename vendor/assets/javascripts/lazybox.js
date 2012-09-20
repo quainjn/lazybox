@@ -11,11 +11,11 @@
             $('#lazybox')[effect](options.speed)
             return options
           },
-    close: function(speed){
+    close: function(speed, onClose){
              speed = speed || defaults.speed;
              ($('#lazybox').position().top == 0) ? effect = 'slideUp' : effect = 'fadeOut'
              $('#lazybox')[effect](speed)
-             $('#lazybox_overlay').fadeOut(speed+200)
+             $('#lazybox_overlay').fadeOut(speed+200, onClose)
            },
     center: function(onTop, fixed){
               if (fixed){
@@ -45,10 +45,10 @@
         img.onload = function(element){
           options = $.lazybox.show(img, options);
           (a.is(':last-child')) ? nextLink = a.siblings('a[rel*=lazybox]:first') : nextLink = a.next('a[rel*=lazybox]:first')
-          if (!nextLink.length == 0) $('#lazybox img').bind('click', function(){ $('#lazybox').fadeOut(options.speed, function(){ nextLink.click() }) })
+          if (!nextLink.length == 0) $('#lazybox img').bind('click', function(){ $('#lazybox').fadeOut(options.speed, (onClose || function(){ nextLink.click() }) ) })
         }
         $(img).attr({'class': 'lazy_img', src: href})
-      } else $.ajax({url: href, success: function(data){ $.lazybox.show(data, options) }, error: function(){ $.lazybox.close(300) }})
+      } else $.ajax({url: href, success: function(data){ $.lazybox.show(data, options) }, error: function(){ $.lazybox.close(300, options.onClose) }})
     });
   }
 
@@ -65,9 +65,9 @@
       (options.closeImg) ? $('#lazybox_close').attr('class', 'img').text('') : $('#lazybox_close').removeClass().text('×')
       if (!$.browser.msie && options.niceClose && !options.closeImg && !options.onTop) $('#lazybox_close').attr('class', 'nice')
     } else $('#lazybox_close').remove();
-    (!options.modal && options.overlay) ? $('#lazybox_overlay').bind('click', function(){ $.lazybox.close(options.speed) }) : $('#lazybox_overlay').unbind()
-    $(document).keyup(function(e) { if (e.keyCode == 27 && options.esc) $.lazybox.close(options.speed) })
-    $('#lazybox_close, #lazybox_body .lazy_buttons a').live('click', function(e){ $.lazybox.close(options.speed); e.preventDefault() })
+    (!options.modal && options.overlay) ? $('#lazybox_overlay').bind('click', function(){ $.lazybox.close(options.speed, options.onClose) }) : $('#lazybox_overlay').unbind()
+    $(document).keyup(function(e) { if (e.keyCode == 27 && options.esc) $.lazybox.close(options.speed, options.onClose) })
+    $('#lazybox_close, #lazybox_body .lazy_buttons a').live('click', function(e){ $.lazybox.close(options.speed, options.onClose); e.preventDefault() })
     return options
   }
 
