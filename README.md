@@ -161,6 +161,7 @@ Options
     esc:        true|false //default true.  Close lazybox on esc press
     close:      true|false //default true.  Show close lazybox button
     niceClose:  true|false //default true.  Show nice close button like in fancybox(IE always shows simple close button)
+    onClose:    callback   //no default     Callback to trigger after lazybox fades out
     modal:      true|false //default true.  Close lazybox on overlay click
     closeImg:   true|false //default false. Use image for close link
     onTop:      true|false //default false. Show lazybox on top instead of on center. It will use slide animation instead of fade.
